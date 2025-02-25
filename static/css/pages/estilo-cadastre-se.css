@@ -1,0 +1,212 @@
+body {
+    margin: 0;
+    padding: 20px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-color: #ffffff;
+    background-size: 100% 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Ubuntu', sans-serif;
+    overflow-x: hidden; 
+    overflow-y: auto; 
+}
+
+body, p {
+    font-family: 'Ubuntu', sans-serif; 
+}
+
+.page-background {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-container {
+    position: relative;
+    background-color: white;
+    padding: 40px;
+    padding-bottom: 60px;
+    border-radius: 5px;
+    border: 2px solid #ccc;
+    width: 85vw;
+    max-width: 420px;
+    height:auto;
+    margin: 0 auto;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+}
+
+form {
+    padding: 0;
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+}
+
+.small-text {
+    font-size: 16px;
+    color: #666;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.exit-icon {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    color: #0F6481;
+    font-size: 20px;
+}
+
+.exit-icon i {
+    cursor: pointer;
+}
+
+.form-row {
+    width: 100%;     
+    margin: 0px;
+}
+
+.form-row > div {
+    flex: 1;     
+    padding: 0px; }
+
+
+
+
+.col-md-6 {
+    padding: 10px;
+}
+
+.forgot-password {
+    color: black; 
+    display: block; 
+    font-size: 14px;
+    text-align: end;
+}
+
+.custom-text {
+    font-family: "Alex Brush", cursive;
+    font-style: bold;
+    font-size: 18px; 
+    margin-top: 30px;
+    color: black; 
+    -webkit-text-stroke: 0.5px black;
+}
+
+.custom-text i {
+    color: black;     
+    font-size: 14px; }
+
+.create-account {
+    color: #0c7496;
+    font-size: 20px;
+    margin-top: 15px;
+    margin-bottom: 30px;
+    text-decoration: none;
+}
+
+.create-account:hover {
+    color: #1090ba;
+    text-decoration: none;
+}
+
+.full-height {
+    height: 100%;
+}
+
+.container-fluid, .row {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.no-gutters {
+    margin-right: 0;
+    margin-left: 0;
+    padding: 0;
+}
+
+.or-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0; }
+
+.line {
+    flex: 1;     
+    height: 1px;     
+    background-color: #c7c5c5; }
+
+.or-text {
+    color: #575757;     
+    white-space: nowrap;     
+    padding: 0 10px; }
+
+.error-container {
+    display: flex;
+    justify-content: center;     
+    width: 100%; }
+
+.error-message {
+    text-align: justify;     
+    margin-top: 30px;     
+    padding: 10px;     
+    font-size: 15px;     
+    color: red; }
+
+.col-12 {
+    flex-direction: column;
+}
+
+.day-select {
+    min-width: 80px; }
+
+.month-select {
+    min-width: 120px; }
+
+.year-select {
+    min-width: 70px; }
+
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.header-container {
+    position: relative;     
+    width: 100%;     
+    padding: 20px 0;     
+    text-align: center; }
+
+.icon-container {
+    position: absolute;     
+    left: 30px;     
+    top: 40px;     
+    transform: translateY(-50%); }
+
+.icon-container i {
+    font-size: 30px; 
+    color: #0c7496;
+}

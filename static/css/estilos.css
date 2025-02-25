@@ -1,0 +1,86 @@
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+main {
+    margin-left: 16%; 
+    padding: 40px;
+}
+
+.fullscreen {
+    min-height: 100vh;
+    background-color: #ffffff; 
+    border-radius: 0.5rem 0 0 0.5rem;
+}
+
+#paginaContainer {
+    height: 100%;
+    border-left: 2px solid #ccc;
+    background-color: white;
+    padding: 0px 100px;
+}
+
+
+.mais-menu-box {
+    display: none; 
+    position: fixed;
+    align-items: left;
+    background-color: white;
+    box-shadow: 0px 5px 20px rgba(0,0,0,0.2); 
+    color: black;
+    padding: 20px; 
+    border-radius: 15px; 
+    z-index: 1000;
+    white-space: nowrap; 
+    width: 280px; 
+    height: auto; 
+    font-size: 18px; 
+}
+
+.mais-menu-button {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: black;
+    border-radius: 10px;
+    align-items: flex-start;
+    border: none; 
+    box-shadow: none; 
+    background-color: transparent;
+    font-size: 15px; 
+    padding: 12px; 
+    margin-bottom: 3px;
+    width: 100%;
+}
+
+.mais-menu-button:hover{
+    background-color: #ececec;
+}
+
+.mais-menu-box .button:last-child {
+    margin-bottom: 0; 
+}
+
+.mais-menu-button i {
+    font-size: 1.2rem; 
+    margin-right: 10px; 
+}
+
+.mais-menu-box .divider {
+    height: 2px; 
+    background-color: #ccc; 
+    opacity: 48%;
+    width: 100%;
+    border-radius: 5px; 
+    margin: 10px 0;
+}
+
+@media (max-width: 768px) {
+    main {
+        margin-left: 10%; 
+    }
+
+    #conteudoContainer {
+        padding: 0px 50px;
+    }
+}

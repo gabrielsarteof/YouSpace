@@ -1,0 +1,185 @@
+{% extends "shared/pages/base.html" %}
+{% block subtitulo %}Editar{% endblock %}
+{% block conteudo %}
+<link rel="stylesheet" href="/static/css/estilo_editar_perfil.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="/static/css/estilo_editar_perfil.css">
+
+<div class="content">
+    <form action="/usuario/atualizar_perfil" method="POST" enctype="multipart/form-data">
+        <div class="container text-center mt-4 bg-highlight">
+            <h3>Editar perfil</h3>
+        
+            <div class="--bg-tertiary-color rounded d-flex flex-column align-items-center justify-content-center bg-highlight">
+                <div class="d-flex align-items-center mb-3 bg-highlight">
+                    <img id="fotoPerfil" src="{% if usuario.foto_perfil %}/static/img/{{ usuario.id }}.jpeg?{{range(0, 10000) | random}}}{% else %}/static/img/usuario.jpg{% endif %}" alt="Foto de Perfil" class="rounded-circle mb-3" style="width: 100px; height: 100px;">
+                </div>
+                <button type="button" id="alterarFoto" class="btn btn-primary trocar-foto-btn">Alterar Foto</button>
+                <input type="file" id="inputFoto" name="foto_perfil" accept="image/*" style="display: none;">
+                <!-- Campo oculto para a imagem cortada -->
+                <input type="hidden" name="foto_perfil_blob" id="foto_perfil_blob">
+            </div>
+        </div>
+        <div id="modalCortar" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Cortar Foto</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="crop-container">
+                            <img id="imagemParaCorte" src="" alt="Imagem para Cortar">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" id="salvarCorte" class="btn btn-primary">Salvar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="middle-box">
+            <div class="mb-3 bg-highlight">
+                <label for="Nome" class="form-label">Nome</label>
+                <input type="text" name="nome" class="form-control input-box" data-mask="nome" id="nome" value="{{ usuario.nome or '' }}" 
+                       placeholder="{{ usuario.nome or 'Nome' }}" required
+                       onfocus="clearValue(this, '{{ usuario.nome or 'Nome' }}')"
+                       onblur="restoreValue(this, '{{ usuario.nome or 'Nome' }}')">
+            </div>
+        
+            <div class="mb-3 bg-highlight">
+                <label for="NomePerfil" class="form-label">Nome do Perfil</label>
+                <input type="text" name="nome_perfil" class="form-control input-box" id="nome_perfil" value="{{ usuario.nome_perfil or '' }}" 
+                       placeholder="{{ usuario.nome_perfil or 'Nome de Perfil' }}" required
+                       onfocus="clearValue(this, '{{ usuario.nome_perfil or 'Nome de Perfil' }}')"
+                       onblur="restoreValue(this, '{{ usuario.nome_perfil or 'Nome de Perfil' }}')">
+            </div>    
+        
+            <div class="mb-3 bg-highlight">
+                <label for="Bio" class="form-label">Bio</label>
+                <textarea name="bio_perfil" class="form-control input-box" id="bio" rows="2"
+                          placeholder="{{ dados_perfil.bio_perfil or 'Bio' }}" required
+                          onfocus="clearValue(this, '{{ dados_perfil.bio_perfil or 'Bio' }}')"
+                          onblur="restoreValue(this, '{{ dados_perfil.bio_perfil or 'Bio' }}')">{{ dados_perfil.bio_perfil }}</textarea>
+            </div>
+        
+            <div class="mb-3 bg-highlight">
+                <label for="Genero" class="form-label">Gênero</label>
+                <select name="genero" id="genero" class="form-select input-box" required>
+                    <option value="" disabled {{ dados_perfil.genero is none and 'selected' }}>Selecione o gênero</option>
+                    <option value="fem" {{ dados_perfil.genero == 'fem' and 'selected' }}>Feminino</option>
+                    <option value="mas" {{ dados_perfil.genero == 'mas' and 'selected' }}>Masculino</option>
+                    <option value="per" {{ dados_perfil.genero == 'per' and 'selected' }}>Personalizado</option>
+                    <option value="pno" {{ dados_perfil.genero == 'pno' and 'selected' }}>Prefiro não opinar</option>
+                </select> 
+            </div>
+        </div>
+        
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary mt-3 btn-next">Atualizar perfil</button>
+        </div>
+    </form>
+    {% if request.cookies.get('mensagem_erro') %}
+        <div class="spacer" style="height: 20px;"></div>
+        <div class="error-container">
+            <span class="error-message">{{ request.cookies.get('mensagem_erro') }}</span>
+        </div>
+        <div class="spacer" style="height: 20px;"></div>
+    {% endif %} 
+</div>
+
+<script src="/static/js/mascararCampos.js"></script>
+<script>
+    // Variável para o cropper da foto de perfil
+    let cropperPerfil;
+
+    document.getElementById('alterarFoto').addEventListener('click', function(event) {
+        event.preventDefault();
+        document.getElementById('inputFoto').click();
+    });
+
+    document.getElementById('inputFoto').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.getElementById('imagemParaCorte');
+                img.src = e.target.result;
+                $('#modalCortar').modal('show'); // Exibe o modal ao carregar a imagem
+
+                img.onload = function() {
+                    if (cropperPerfil) {
+                        cropperPerfil.destroy(); // Destrói o cropper anterior, se houver
+                    }
+                    cropperPerfil = new Cropper(img, {
+                        aspectRatio: 1, // Proporção 1:1 para o corte quadrado
+                        viewMode: 3, // Limita a imagem dentro do canvas
+                        dragMode: 'move', // Permite mover a imagem
+                        autoCropArea: 1, // A área de corte ocupará o máximo possível
+                        cropBoxMovable: false, // Impede o movimento da área de corte
+                        cropBoxResizable: false, // Impede o redimensionamento da área de corte
+                        zoomable: true, // Permite o zoom
+                        movable: true, // Permite mover a imagem
+                        background: false, // Remove o fundo escuro ao redor
+                        guides: false, // Remove guias de linha no cropper
+                        center: false, // Remove a linha central
+                        highlight: false, // Remove destaque fora da área de corte
+                        modal: false, // Remove o "escurecimento" ao redor da área de corte
+                    });
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    document.getElementById('salvarCorte').addEventListener('click', function() {
+        const canvas = cropperPerfil.getCroppedCanvas({
+            width: 300,
+            height: 300
+        });
+
+        canvas.toBlob(function(blob) {
+            const url = URL.createObjectURL(blob);
+            document.getElementById('fotoPerfil').src = url; // Exibe a imagem cortada no perfil
+            const fileInput = document.getElementById('foto_perfil_blob');
+
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend = function() {
+                fileInput.value = reader.result; // Armazenar o Data URL no campo oculto
+            };
+
+            $('#modalCortar').modal('hide'); // Fecha o modal ao salvar a imagem cortada
+        }, 'image/png', 0.9); // Qualidade da imagem PNG em 90%
+    });
+
+    // Atualizar o evento de envio do formulário
+    document.querySelector('form').addEventListener('submit', function(event) {
+        const croppedImageBlob = document.getElementById('foto_perfil_blob').files.length;
+        if (croppedImageBlob === 0) {
+            alert("Por favor, corte e salve a imagem antes de enviar.");
+            event.preventDefault();
+        }
+    });
+
+    function clearValue(input, placeholder) {
+        if (input.value === placeholder) {
+            input.value = '';
+        }
+    }
+
+    function restoreValue(input, placeholder) {
+        if (input.value === '') {
+            input.value = placeholder;
+        }
+    }
+</script>
+
+{% endblock %}

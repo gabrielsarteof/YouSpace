@@ -1,0 +1,80 @@
+.content {
+    width: 100%;
+    padding-bottom: 40px;
+}
+
+#modalCortar .modal-dialog {
+    max-width: 400px;
+    margin: auto;
+}
+
+#crop-container {
+    width: 300px;
+    height: 300px;
+    overflow: visible;
+    position: relative;
+    margin: auto;
+    background-color: #f0f0f0;
+}
+
+#imagemParaCorte {
+    max-width: 100%;
+    display: block;
+    position: absolute;
+    cursor: grab; }
+
+#imagemParaCorte:active {
+    cursor: grabbing; }
+
+#crop-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.5);     
+    pointer-events: none;     
+    z-index: 1; }
+
+.error-container {
+    display: flex;
+    justify-content: center;     width: 100%; }
+
+.error-message {
+    color: red;
+    margin-top: 10px;
+}
+
+.input-box {
+    background-color: #EBEAE9;
+    padding: 0 20px;
+    min-height: 60px;
+    border-radius: 10px;
+}
+
+.middle-box {
+    padding-top: 60px;
+}
+
+.btn-next {
+    width: 200px;
+    border-radius: 20px;
+    padding: 10px 0;
+    background-color: #006994;
+}
+
+.trocar-foto-btn {
+    border-radius: 20px;
+    color: #0076AA;
+    font-size: 18px;
+    background-color: transparent;
+    border: none;
+}
+
+.trocar-foto-btn:hover{
+    color: #0076AA;
+    background-color: transparent;
+}
+

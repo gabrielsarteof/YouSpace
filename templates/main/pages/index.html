@@ -1,0 +1,168 @@
+{% extends "shared/pages/base.html" %}
+{% block subtitulo %}Página Inicial{% endblock %}
+{% block conteudo %}
+<link rel="stylesheet" href="/static/css/estilo_pagina_inicial.css">
+
+<!-- Conteúdo principal -->
+<div class="content">
+    <!-- Bolinhas clicáveis -->
+    <div class="d-flex justify-content-between my-4">
+        <!-- Bolinha com ícone de + no canto inferior direito -->
+        <div class="story-circle text-center position-relative">
+            <a href="#" style="text-decoration: none;">
+                <img src="{% if usuario.foto_perfil %}/static/img/{{ usuario.id }}.jpeg?{{range(0, 10000) | random}}}{% else %}/static/img/usuario.jpg{% endif %}" alt="Story 1" class="rounded-circle" style="border-color:#47A9FF">
+            </a>            
+                        <a href="#" class="position-absolute plus-icon" style="top: 8px; right: -5px;">
+                <span class="badge translate-middle">
+                    <i class="bi bi-plus-circle-fill" style="color: #2C556C; font-size: 18px;"></i>
+                </span>
+            </a>            
+            <a href="#" style="text-decoration: none;"><p class="mt-2 text-dark">My Daily</p></a>
+        </div>
+        {% for story in stories %}
+            <div class="story-circle text-center">
+                <a href="/usuario/daily1" style="text-decoration: none;"><img src="{{story.usuario_foto}}" alt="Story 2" class="rounded-circle" style="border-color:#47A9FF"></a>
+                <a href="/usuario/daily1" style="text-decoration: none;"><p class="mt-2 text-dark">{{story.usuario_nome}}</p></a>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Publicação -->
+    {% for publicacao in publicacoes %}
+    <div class="post bg-white p-3 rounded mb-4 mx-auto" style="width: fit-content;">
+        <!-- Seta no canto superior direito -->
+        <div class="d-flex align-items-center mb-3">
+            <img src="{{publicacao.usuario_foto}}" alt="Profile" class="rounded-circle me-2" style="width: 50px;">
+            <a href="/usuario/perfil" style="text-decoration: none;" class="font-weight-bold text-dark">{{publicacao.usuario_nome}}
+            <i class="bi bi-award ms-2" style="color: #4AE4D6;"></i></a>
+            <div class="position-relative ms-auto">
+                <a href="#" class="flag-icon">
+                    <i class="bi bi-chevron-down fs-4" style="color: #47525E;"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Container da Imagem de Publicação -->
+        <div class="post-image">
+            <img src="/static/img/publicacoes/{{publicacao.imagem}}" alt="Post Image" class="img-fluid">
+        </div>
+
+        <!-- Ícones de ações -->
+        <div class="post-actions mt-3 d-flex justify-content-between align-items-center">
+            <div class="d-flex">
+                <button 
+                    type="button" 
+                    id="curtir-btn" 
+                    class="pub-actions-btn" 
+                    aria-label="Curtir publicação"
+                    data-publicacao-id="{{ publicacao.id_publicacao }}">
+                    <i 
+                        class="{% if publicacao.curtido %}bi bi-heart-fill{% else %}bi bi-heart{% endif %}" >
+                    </i>
+                </button>
+                <button 
+                    type="button" 
+                    class="pub-actions-btn" 
+                    aria-label="Comentar">
+                    <i 
+                        class="bi bi-chat" >
+                    </i>
+                </button>
+                <button 
+                    type="button" 
+                    class="pub-actions-btn" 
+                    aria-label="Comentar">
+                    <i 
+                        class="bi bi-send" >
+                    </i>
+                </button>
+            </div>
+            <!-- Ícone de bandeira no canto inferior direito -->
+            <div class="position-relative">
+                <a href="#" class="flag-icon" style="right: 0;">
+                    <i class="bi bi-flag fs-4"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+
+
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll("#curtir-btn").forEach(button => {
+        button.addEventListener("click", function () {
+            const publicacaoId = this.getAttribute("data-publicacao-id");
+            const usuarioId = "{{ request.state.usuario.id }}";
+            const curtirIcon = this.querySelector("i");
+
+            if (curtirIcon.classList.contains("bi-heart-fill")) {
+                descurtirPublicacao(publicacaoId, usuarioId, curtirIcon);
+            } else {
+                curtirPublicacao(publicacaoId, usuarioId, curtirIcon);
+            }
+        });
+    });
+});
+
+function curtirPublicacao(publicacaoId, usuarioId, icon) {
+    fetch("/usuario/curtir_publicacao", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            id_publicacao: publicacaoId,
+            id_usuario: usuarioId,
+        }),
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "sucesso") {
+                icon.classList.remove("bi-heart"); // Remove o ícone de "não curtido"
+                icon.classList.add("bi-heart-fill"); // Adiciona o ícone de "curtido"
+                icon.style.color = "red"; // Altera a cor para vermelho
+            } else {
+                alert("Erro ao curtir a publicação.");
+            }
+        })
+        .catch(error => {
+            console.error("Erro ao curtir publicação:", error);
+            alert("Erro ao curtir a publicação.");
+        });
+}
+
+function descurtirPublicacao(publicacaoId, usuarioId, icon) {
+    fetch("/usuario/descurtir_publicacao", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            id_publicacao: publicacaoId,
+            id_usuario: usuarioId,
+        }),
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "sucesso") {
+                icon.classList.remove("bi-heart-fill"); // Remove o ícone de "curtido"
+                icon.classList.add("bi-heart"); // Adiciona o ícone de "não curtido"
+                icon.style.color = ""; // Reseta a cor para a cor original
+            } else {
+                alert("Erro ao descurtir a publicação.");
+            }
+        })
+        .catch(error => {
+            console.error("Erro ao descurtir publicação:", error);
+            alert("Erro ao descurtir a publicação.");
+        });
+}
+
+</script>
+
+{% endblock %}

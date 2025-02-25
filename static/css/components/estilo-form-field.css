@@ -1,0 +1,39 @@
+.form-field {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.custom-input {
+    width: 100%;
+    padding: 12px;
+    padding-left: 10px; 
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    background-color: transparent;
+    transition: border-color 0.3s;
+}
+
+.custom-input:focus {
+    border-color: black;
+}
+
+.custom-label {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    color: #6c757d;
+    transition: top 0.2s ease, font-size 0.2s ease, color 0.2s ease;
+}
+
+.custom-input:focus + .custom-label,
+.custom-input:not(:placeholder-shown) + .custom-label {
+    top: 0px;
+    font-size: 0.8rem;
+    background-color: white;
+    color: black
+}
+

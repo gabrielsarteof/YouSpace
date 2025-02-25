@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/static/img/favicon.svg" type="image/x-icon">
+    <link rel="stylesheet" href="/static/lib/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/lib/bootstrap-icons/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Ubuntu:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@200;300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/estilos.css">
+    <title>YouSpace :: {% block subtitulo %}{% endblock %}</title>
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+    {%- set usuario = request.state.usuario -%}
+    {% from 'shared/macros.html' import mais_menu_button %}
+    <div class="container-fluid">
+        <!-- Dropdown -->
+        <div id="searchDropdown" class="search-dropdown">
+            <div class="search-top-box">
+                <h5>Pesquisa</h5>
+                <input type="text" class="form-control" id="inputPesquisaPerfil" placeholder="Pesquisar" aria-label="Pesquisa">
+            </div>
+            <div class="divider"></div>
+            <div class="search-bottom-box">
+                <div id="resultadosPesquisaPerfil"></div> <!-- Resultados serão inseridos aqui -->
+            </div>
+        </div>
+
+        <div class="mais-menu-box" id="maisMenu">
+            {{mais_menu_button(nome="Sua Atividade", click_function="window.location.href='#'", icone="bi bi-bar-chart-line")}}
+            {{mais_menu_button(nome="Salvos", click_function="window.location.href='#'", icone="bi bi-flag")}}
+            {{mais_menu_button(nome="Alternar Exibição", click_function="window.location.href='#'", icone="bi bi-sun")}}
+            {{mais_menu_button(nome="Relatar um Problema", click_function="window.location.href='#'", icone="bi bi-cloud")}}
+            <div class="divider"></div>
+            {{mais_menu_button(nome="Trocar de Conta", click_function="window.location.href='#'", icone="bi bi-arrow-repeat")}}
+            {{mais_menu_button(nome="Sair", click_function="window.location.href='/sair'", icone="bi bi-box-arrow-right")}}
+        </div>
+        <div class="row">
+            {% include "shared/includes/header.html" %}
+            <main class="col min-vh-100" id="paginaContainer">
+                {% block conteudo %}
+                {% endblock %}
+            </main>
+        </div>
+    </div>
+    <script src="/static/lib/bootstrap/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
